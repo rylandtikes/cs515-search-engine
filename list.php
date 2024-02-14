@@ -16,9 +16,9 @@ if ($keywords) {
     # Query for when keywords entered
     $sql = "SELECT count(k.keyword) AS keyword_count, group_concat(k.keyword";
     $sql .= " ORDER BY k.keyword ASC SEPARATOR ' ') AS keyword_group, u.url,";
-    $sql .= " u.title, u.keywords, u.description FROM keywords k, url_title u,";
-    $sql .= " www_index w WHERE k.keyword IN ('" . $imploded_arr . "')";
-    $sql .= " AND k.kwID=w.kwID AND w.urlID=u.urlID GROUP BY u.url";
+    $sql .= " u.title, mk.keywords, md.description FROM keywords k, url_title u,";
+    $sql .= " www_index w, meta_keywords mk, meta_description md WHERE k.keyword IN ('" . $imploded_arr . "')";
+    $sql .= " AND k.kwID=w.kwID AND w.urlID=u.urlID AND mk.keywordsID=u.keywordsID AND md.descriptionID=u.descriptionID GROUP BY u.url";
     $sql .= " ORDER BY keyword_count DESC;";
 }
 
@@ -26,8 +26,8 @@ else {
     # Query for when no keywords entered
     $sql = "SELECT count(k.keyword) AS keyword_count, group_concat(k.keyword";
     $sql .= " ORDER BY k.keyword ASC SEPARATOR ' ') AS keyword_group, u.url, u.title,";
-    $sql .= "  u.keywords, u.description FROM keywords k, url_title u, www_index w";
-    $sql .= "  WHERE k.keyword LIKE '%%' AND k.kwID=w.kwID AND w.urlID=u.urlID";
+    $sql .= "  mk.keywords, md.description FROM keywords k, url_title u, www_index w, meta_keywords mk, meta_description md";
+    $sql .= "  WHERE k.keyword LIKE '%%' AND k.kwID=w.kwID AND w.urlID=u.urlID AND mk.keywordsID=u.keywordsID AND md.descriptionID=u.descriptionID";
     $sql .= "  GROUP BY u.url ORDER BY keyword_count DESC;";
 }
 
