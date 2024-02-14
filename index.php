@@ -33,7 +33,7 @@ if ($_POST['act'] == "Clear system") {
 
 elseif ($_POST['act'] == "Index web pages") {
     header("Content-type: text/plain");
-    system("/usr/bin/php -d max_execution_time=400  spider.php  $URL $max_pages");
+    system("/usr/bin/php  spider.php  $URL $max_pages");
 } elseif ($_POST['act'] == "List indexes") {
     header("Content-type: text/html");
     system("/usr/bin/php  list.php \"$keywords\"");

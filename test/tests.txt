@@ -1,0 +1,7 @@
+Spider curl execution time in seconds: 396.6306540966
+Spider curl execution time in seconds: 341.66341590881
+Spider curl execution time in seconds: 390.55880308151
+
+Spider lynx execution time in seconds: 501.24079489708
+Spider lynx execution time in seconds: 410.00203895569
+Spider lynx execution time in seconds: 383.91970801353
