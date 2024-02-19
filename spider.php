@@ -100,90 +100,110 @@ function update_meta_keywords($keywords, $conn)
 
 $time_start = microtime(true);
 
+# Load stopwards from file into array
 $stopwords_array = explode("\n", file_get_contents('stopwords.txt'));
+
+# create associative array for O(1) lookup
+$stopwords = [];
+foreach ($stopwords_array as $val) {
+    $stopwords[$val] = true;
+}
 
 extract_urls($seed_url, $seed_url, $url_file_name);
 
 $url_stack = array_unique(explode("\n", file_get_contents($url_file_name)));
 
 $do_not_crawl = array(
-    '.3gp',
-    '.aac',
-    '.ai',
-    '.aiff',
-    '.asf',
-    '.asx',
-    '.au',
-    '.avi',
-    '.bin',
-    '.bmp',
-    '.css',
-    '.doc',
-    '.drw',
-    '.dxf',
-    '.eps',
-    '.exe',
-    '.gif',
-    '.jpeg',
-    '.jpg',
-    '.m4a',
-    '.mid',
-    '.mng',
-    '.mov',
-    '.mp3',
-    '.mp4',
-    '.mpg',
-    '.ogg',
-    '.pct',
-    '.pdf',
-    '.png',
-    '.ps',
-    '.psp',
-    '.pst',
-    '.qt',
-    '.ra',
-    '.rar',
-    '.rm',
-    '.rss',
-    '.svg',
-    '.swf',
-    '.tif',
-    '.tiff',
-    '.wav',
-    '.wma',
-    '.wmv',
-    '.xml',
-    '.zip',
-    'st)}',
-    '.xls',
-    '.xsl'
+    '.3gp' => true,
+    '.aac' => true,
+    '.ai' => true,
+    '.aiff' => true,
+    '.asf' => true,
+    '.asx' => true,
+    '.au' => true,
+    '.avi' => true,
+    '.bin' => true,
+    '.bmp' => true,
+    '.css' => true,
+    '.doc' => true,
+    '.drw' => true,
+    '.dxf' => true,
+    '.eps' => true,
+    '.exe' => true,
+    '.gif' => true,
+    '.jpeg' => true,
+    '.jpg' => true,
+    '.m4a' => true,
+    '.mid' => true,
+    '.mng' => true,
+    '.mov' => true,
+    '.mp3' => true,
+    '.mp4' => true,
+    '.mpg' => true,
+    '.ogg' => true,
+    '.pct' => true,
+    '.pdf' => true,
+    '.png' => true,
+    '.ps' => true,
+    '.psp' => true,
+    '.pst' => true,
+    '.qt' => true,
+    '.ra' => true,
+    '.rar' => true,
+    '.rm' => true,
+    '.rss' => true,
+    '.svg' => true,
+    '.swf' => true,
+    '.tif' => true,
+    '.tiff' => true,
+    '.wav' => true,
+    '.wma' => true,
+    '.wmv' => true,
+    '.xml' => true,
+    '.zip' => true,
+    'st)}' => true,
+    '.xls' => true,
+    '.xsl' => true
 );
 
 $crawl_time_start = microtime(true);
 
-$crawled_url = array(
-    $seed_url
-);
+$crawled_url = [];
+$crawled_url[$seed_url] = true;
+
 while (!empty($url_stack)) {
+
     $url = array_pop($url_stack);
+
+    $file_ex3 = substr($url, -3);
+    $file_ex4 = substr($url, -4);
+    $file_ex5 = substr($url, -5);
+
+    $file_ex = explode(".", string, limit);
+    
     if (count($crawled_url) >= $max_pages) {
         echo "Reached max urls $max_pages\n";
         break;
     }
     # do not crawl some files
-    if (empty($url) || in_array(substr($url, -4), $do_not_crawl)) {
+    if (empty($url) || isset($do_not_crawl[$file_ex3]) || isset($do_not_crawl[$file_ex4]) || isset($do_not_crawl[$file_ex5])) {
         continue;
     }
-    if (in_array($url, $crawled_url)) {
+
+    if (isset($crawled_url[$url])) {
+        #echo "$url already crawled skipping\n";
         continue;
     }
+
     extract_urls($url, $seed_url, $url_file_name);
     $next_url_array = explode("\n", file_get_contents($url_file_name));
     $url_stack      = array_unique(array_merge($next_url_array, $url_stack));
-    array_push($crawled_url, $url);
+    $crawled_url[$url] = true;
 }
 echo 'Extracting URLs execution time in seconds: ' . (microtime(true) - $crawl_time_start);
 
+unset($next_url_array);
+unset($url_stack);
 unset($url);
 
 $crawled_url = array_slice($crawled_url, 0, $max_pages);
@@ -201,8 +221,9 @@ $url_meta_description = substr($tags['description'], 0, 160);
 
 $descriptionID = (int) update_meta_description($url_meta_description, $conn);
 
-foreach ($crawled_url as $key => $url) {
-    $n = $key + 1;
+$n = 0;
+foreach ($crawled_url as $url => $val) {
+    $n++;
     echo "[$n] Extracting source from $url \n";
     extract_source($url, $lynx_file_name);
     
@@ -212,7 +233,7 @@ foreach ($crawled_url as $key => $url) {
     $keywords_array = array_filter(explode(' ', $title));
     
     foreach ($keywords_array as $keyword) {
-        if (in_array($keyword, $stopwords_array)) {
+        if (isset($stopwords[$keyword])) {
             echo "keyword $keyword removed\n";
             continue;
         } else {

@@ -1,46 +1,49 @@
+<!DOCTYPE html>
 <html>
- <form method="post" action="index.php">
-  <br>
-  <br>
-  <br>
+<head>
+    <title>Focused Search Engine CSCI 515</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type=text], input[type=password], input[type=submit] { padding: 10px; width: 100%; box-sizing: border-box; }
+        input[type=submit] { background-color: #888b88; color: white; border: none; cursor: pointer; }
+        input[type=submit]:hover { background-color: #8ca045; }
+        fieldset { border: none; margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+    <form method="post" action="index.php">
+        <div class="form-group">
+            <label for="URL">URL:</label>
+            <input type="text" id="URL" name="URL" size="50" value="https://www.w3schools.com/xml/">
+        </div>
 
-  <br>
-  URL:&nbsp;<input name="URL" size="50" value="https://www.w3schools.com/xml/">
-  <br>
-  <br>
-  <br>
-  Max Pages:&nbsp;<input type="text" name="maxpages" size="3" value="500">
-  <br>
-  <br>
-  <input type="submit" name="act" value="Index web pages">
-  <br>
-  <br>
-  <br>
-  <br>
-  keywords(seperate with space):&nbsp;<input name="keywords" size="50" value="XML">
-  <br>
-  <br>
-  <input type="submit" name="act" value="List indexes">
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  Interface:&nbsp;<input type="text" name="interface" size="6" value="1">
-  <br>
-  <br>
-  Password:&nbsp;<input type="password" size="16" name="password" value="password">
-  <br>
-  <br>
-  <br>
-  <input type="submit" name="act" value="Display source">
-  <br>
-  <br>
-  <br>
-  <br>
-  <input type="submit" name="act" value="Clear system">
-  <br>
-  <br>
-  <input type="submit" name="act" value="Help">
- </form>
+        <div class="form-group">
+            <label for="maxpages">Max Pages:</label>
+            <input type="text" id="maxpages" name="maxpages" size="3" value="100">
+        </div>
+
+        <div class="form-group">
+            <label for="keywords">Keywords (separate with space):</label>
+            <input type="text" id="keywords" name="keywords" size="50" value="XML">
+        </div>
+
+        <div class="form-group">
+            <label for="interface">Interface:</label>
+            <input type="text" id="interface" name="interface" size="6" value="1">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" size="16" value="password">
+        </div>
+
+        <input type="submit" name="act" value="Index web pages">
+        <input type="submit" name="act" value="List indexes">
+        <input type="submit" name="act" value="Display source">
+        <input type="submit" name="act" value="Clear system">
+        <input type="submit" name="act" value="Help">
+    </form>
+</body>
 </html>
