@@ -107,56 +107,56 @@ extract_urls($seed_url, $seed_url, $url_file_name);
 $url_stack = array_unique(explode("\n", file_get_contents($url_file_name)));
 
 $do_not_crawl = array(
-    '.3gp',
-    '.aac',
-    '.ai',
-    '.aiff',
-    '.asf',
-    '.asx',
-    '.au',
-    '.avi',
-    '.bin',
-    '.bmp',
-    '.css',
-    '.doc',
-    '.drw',
-    '.dxf',
-    '.eps',
-    '.exe',
-    '.gif',
-    '.jpeg',
-    '.jpg',
-    '.m4a',
-    '.mid',
-    '.mng',
-    '.mov',
-    '.mp3',
-    '.mp4',
-    '.mpg',
-    '.ogg',
-    '.pct',
-    '.pdf',
-    '.png',
-    '.ps',
-    '.psp',
-    '.pst',
-    '.qt',
-    '.ra',
-    '.rar',
-    '.rm',
-    '.rss',
-    '.svg',
-    '.swf',
-    '.tif',
-    '.tiff',
-    '.wav',
-    '.wma',
-    '.wmv',
-    '.xml',
-    '.zip',
-    'st)}',
-    '.xls',
-    '.xsl'
+    '.3gp' => true,
+    '.aac' => true,
+    '.ai' => true,
+    '.aiff' => true,
+    '.asf' => true,
+    '.asx' => true,
+    '.au' => true,
+    '.avi' => true,
+    '.bin' => true,
+    '.bmp' => true,
+    '.css' => true,
+    '.doc' => true,
+    '.drw' => true,
+    '.dxf' => true,
+    '.eps' => true,
+    '.exe' => true,
+    '.gif' => true,
+    '.jpeg' => true,
+    '.jpg' => true,
+    '.m4a' => true,
+    '.mid' => true,
+    '.mng' => true,
+    '.mov' => true,
+    '.mp3' => true,
+    '.mp4' => true,
+    '.mpg' => true,
+    '.ogg' => true,
+    '.pct' => true,
+    '.pdf' => true,
+    '.png' => true,
+    '.ps' => true,
+    '.psp' => true,
+    '.pst' => true,
+    '.qt' => true,
+    '.ra' => true,
+    '.rar' => true,
+    '.rm' => true,
+    '.rss' => true,
+    '.svg' => true,
+    '.swf' => true,
+    '.tif' => true,
+    '.tiff' => true,
+    '.wav' => true,
+    '.wma' => true,
+    '.wmv' => true,
+    '.xml' => true,
+    '.zip' => true,
+    'st)}' => true,
+    '.xls' => true,
+    '.xsl' => true
 );
 
 $crawl_time_start = microtime(true);
@@ -171,12 +171,14 @@ while (!empty($url_stack)) {
         break;
     }
     # do not crawl some files
-    if (empty($url) || in_array(substr($url, -4), $do_not_crawl)) {
+    if (empty($url) || isset($do_not_crawl[substr($url, -4)])) {
         continue;
     }
+
     if (in_array($url, $crawled_url)) {
         continue;
     }
+
     extract_urls($url, $seed_url, $url_file_name);
     $next_url_array = explode("\n", file_get_contents($url_file_name));
     $url_stack      = array_unique(array_merge($next_url_array, $url_stack));
